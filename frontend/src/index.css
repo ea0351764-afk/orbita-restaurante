@@ -1,0 +1,171 @@
+/* ===== VARIABLES DE COLOR ===== */
+:root {
+  --texto-principal: #f0f0f0;
+  --texto-secundario: #cccccc;
+  --bg-principal: #1a1a2e;
+  --bg-tarjeta: rgba(44, 44, 62, 0.75);
+  --color-dorado: #d49838;
+  --color-azul: #2563eb;
+}
+
+/* ===== RESET GENERAL ===== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* ===== ESTILOS DEL CUERPO ===== */
+body {
+  background-color: transparent;
+  color: var(--texto-principal) !important;
+  font-family: system-ui, -apple-system, sans-serif;
+  min-height: 100vh;
+}
+
+#root {
+  min-height: 100vh;
+  background-color: transparent;
+  position: relative;
+  z-index: 1;
+}
+
+/* ===== TARJETAS Y SECCIONES ===== */
+.tarjeta {
+  background-color: var(--bg-tarjeta);
+  border-radius: 12px;
+  padding: 2rem;
+  border: 1px solid var(--color-dorado);
+}
+
+/* ===== BOTONES ===== */
+button, .boton-azul, .button-dorado {
+  padding: 0.75rem 1.5rem;
+  border-radius: 6px;
+  font-weight: 500;
+  cursor: pointer;
+  border: none;
+  transition: all 0.25s ease;
+}
+
+button:hover, .boton-azul:hover, .button-dorado:hover {
+  transform: translateY(-2px);
+}
+
+.button-dorado {
+  background-color: var(--color-dorado);
+  color: #000;
+}
+
+.boton-azul {
+  background-color: var(--color-azul);
+  color: white;
+}
+
+/* ===== FORMULARIOS ===== */
+input, textarea {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--color-dorado);
+  border-radius: 6px;
+  background-color: var(--bg-tarjeta);
+  color: var(--texto-principal);
+  font-size: 1rem;
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+
+input:focus, textarea:focus {
+  border-color: var(--color-dorado);
+  box-shadow: 0 0 0 2px rgba(212, 152, 56, 0.2);
+}
+
+label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: var(--texto-principal);
+  font-weight: 500;
+}
+
+.grupo-campo {
+  margin-bottom: 1.25rem;
+}
+
+a {
+  color: var(--color-dorado);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+
+/* Para pantallas de celular */
+@media (max-width: 768px) {
+  nav {
+    flex-direction: column;
+    gap: 0.75rem;
+    padding: 1rem;
+    align-items: center;
+  }
+
+    nav a, nav button {
+    width: 100%;
+    text-align: center;
+    justify-content: center;
+  }
+
+  .logo-grande {
+    max-width: 200px;
+    margin: 0 auto;
+  }
+  
+  .contenedor-inicio {
+    padding-top: 1rem;
+  }
+  
+
+}
+
+/* Corrige el desbordamiento en móvil */
+html, body {
+  overflow-x: hidden;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+*, *::before, *::after {
+  box-sizing: inherit;
+}
+
+/* Contenedor principal */
+.contenedor-pagina, main {
+  width: 100%;
+  max-width: 100%;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Tarjetas del menú en celular */
+.tarjetas-menu {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.75rem;
+  width: 100%;
+}
+
+.tarjeta-plato {
+  width: 100%;
+  margin: 0;
+}
+
+/* Títulos en móvil */
+h2 {
+  font-size: 1.25rem;
+  text-align: center;
+}
