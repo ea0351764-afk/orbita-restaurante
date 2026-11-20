@@ -3,6 +3,9 @@ import { supabase } from '../supabase'
 import { useNavigate } from 'react-router-dom'
 
 export default function MiPerfil() {
+  const [archivoSubido, setArchivoSubido] = useState(null)
+  const [urlArchivo, setUrlArchivo] = useState('')
+  const [tipoArchivo, setTipoArchivo] = useState('imagen')
   const [usuario, setUsuario] = useState(null)
   const [nombreUsuario, setNombreUsuario] = useState('')
   const [biografia, setBiografia] = useState('')
@@ -12,10 +15,50 @@ export default function MiPerfil() {
   const [mostrarFormulario, setMostrarFormulario] = useState(false)
   const [nuevoTitulo, setNuevoTitulo] = useState('')
   const [nuevaDescripcion, setNuevaDescripcion] = useState('')
-  const [nuevaImagen, setNuevaImagen] = useState(null)
   const [esPublico, setEsPublico] = useState(false)
   const navigate = useNavigate()
 
+  const subirArchivo = async (e) => {
+    const archivo = e.target.files[0]
+    if (!archivo) return
+
+    setArchivoSubido(archivo)
+
+    // Detectar si es imagen o video
+    if (archivo.type.startsWith('image/')) {
+      setTipoArchivo('imagen')
+    } else if (archivo.type.startsWith('video/')) {
+      setTipoArchivo('video')
+    }
+
+    // Nombre único para el archivo
+    const nombreUnico = `${Date.now()}-${archivo.name}`
+
+    // Subir a Supabase
+    const { error } = await supabase
+      .storage
+      .from('archivos')
+      .upload(`public/${nombreUnico}`, archivo, {
+        cacheControl: '3600',
+        upsert: false
+      })
+
+    if (error) {
+      console.error('Error al subir:', error)
+      alert('No se pudo subir el archivo')
+      return
+    }
+
+    // Obtener la URL pública
+    const { data: { publicUrl } } = supabase
+      .storage
+      .from('archivos')
+      .getPublicUrl(`public/${nombreUnico}`)
+
+    setUrlArchivo(publicUrl)
+    console.log('✅ Archivo subido:', publicUrl)
+  }
+  
   // Cargar datos del usuario
   useEffect(() => {
     const obtenerUsuario = async () => {
@@ -65,27 +108,13 @@ export default function MiPerfil() {
   // Crear nuevo portafolio
   const handleCrearPortafolio = async (e) => {
     e.preventDefault()
-    
-    let imagenUrl = ''
-    if (nuevaImagen) {
-      const nombreArchivo = `${Date.now()}-${nuevaImagen.name}`
-      const { data: uploadData } = await supabase.storage
-        .from('portafolios')
-        .upload(nombreArchivo, nuevaImagen)
-      
-      if (uploadData) {
-        const { data: { publicUrl } } = supabase.storage
-          .from('portafolios')
-          .getPublicUrl(nombreArchivo)
-        imagenUrl = publicUrl
-      }
-    }
 
     const { error } = await supabase.from('portafolios').insert([{
       usuario_id: usuario.id,
       titulo: nuevoTitulo,
       descripcion: nuevaDescripcion,
-      imagen_url: imagenUrl,
+      imagen_url: urlArchivo,
+      tipo_archivo: tipoArchivo,
       es_publico: esPublico
     }])
 
@@ -94,7 +123,8 @@ export default function MiPerfil() {
     alert('✅ ¡Portafolio publicado!')
     setNuevoTitulo('')
     setNuevaDescripcion('')
-    setNuevaImagen(null)
+    setUrlArchivo('')
+    setArchivoSubido(null)
     setEsPublico(false)
     setMostrarFormulario(false)
     cargarPortafolios()
@@ -216,13 +246,31 @@ export default function MiPerfil() {
                 />
               </div>
               <div className="grupo-campo">
-                <label>Imagen del trabajo</label>
-                <input 
-                  type="file" 
-                  accept="image/*"
-                  onChange={(e) => setNuevaImagen(e.target.files[0])}
+                <label>📁 Imagen o video del trabajo:</label>
+                <input
+                  type="file"
+                  accept="image/*,video/*"
+                  onChange={subirArchivo}
                 />
+                <p style={{ fontSize: '0.875rem', color: '#888', marginTop: '0.25rem' }}>
+                  Formatos: JPG, PNG, MP4
+                </p>
               </div>
+
+              {/* Vista previa del archivo */}
+              {urlArchivo && (
+                <div style={{ margin: '1rem 0', padding: '1rem', background: 'rgba(212, 152, 56, 0.1)', borderRadius: '8px', border: '1px solid rgba(212, 152, 56, 0.3)' }}>
+                  <p style={{ color: '#d49838', marginBottom: '0.5rem', fontWeight: 'bold' }}>✅ Archivo listo:</p>
+                  {tipoArchivo === 'imagen' ? (
+                    <img src={urlArchivo} alt="Vista previa" style={{ maxWidth: '300px', borderRadius: '4px' }} />
+                  ) : (
+                    <video src={urlArchivo} controls style={{ maxWidth: '300px', borderRadius: '4px' }}>
+                      Tu navegador no soporta videos
+                    </video>
+                  )}
+                </div>
+              )}
+
               <div style={{display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1rem'}}>
                 <input 
                   type="checkbox" 
@@ -248,7 +296,15 @@ export default function MiPerfil() {
           <div style={{display: 'grid', gap: '1.5rem'}}>
             {portafolios.map(p => (
               <div key={p.id} className="tarjeta" style={{display: 'flex', gap: '1.5rem', flexWrap: 'wrap'}}>
-                {p.imagen_url ? (
+                {p.imagen_url && p.tipo_archivo === 'video' ? (
+                  <video 
+                    src={p.imagen_url} 
+                    controls
+                    style={{width: '150px', height: '150px', objectFit: 'cover', borderRadius: '8px'}}
+                  >
+                    Tu navegador no soporta videos
+                  </video>
+                ) : p.imagen_url ? (
                   <img 
                     src={p.imagen_url} 
                     alt={p.titulo}
@@ -299,4 +355,4 @@ export default function MiPerfil() {
       </div>
     </div>
   )
-}
+}}
