@@ -112,7 +112,7 @@ export default function Inicio() {
         </p>
 
       <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap', marginBottom: '4rem' }}>
-         <Link to="/portafolios" style={{textDecoration:"none"}}>
+         <Link to="/PortafoliosPublicos" style={{textDecoration:"none"}}>
              <button style={{ padding: '0.8rem 1.6rem', border: '1px solid #2266bb', borderRadius: '8px', background: '#ffffff', color: '#2266bb', fontSize: '1rem' }}>
              Ver Portafolios
              </button>
