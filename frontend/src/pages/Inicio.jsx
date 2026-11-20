@@ -501,6 +501,7 @@ export default function Inicio() {
           <p style={{margin: '1rem 0'}}>
             Descubre convocatorias, comparte tu portafolio y participa en actividades artísticas únicas
           </p>
+          <Link to="https://www.instagram.com/orbi.ta2026?utm_source=qr&lqvp=cnVmMGY2bzdhbjl4" style={{ textDecoration: "none" }}>
           <button style={{
             padding: '0.7rem 1.4rem',
             borderRadius: '20px',
@@ -511,6 +512,7 @@ export default function Inicio() {
           }}>
             Ver actividades disponibles
           </button>
+          </Link>
         </div>
         <div>
           <img
