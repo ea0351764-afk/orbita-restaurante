@@ -18,11 +18,13 @@ export default function MiPerfil() {
   const [esPublico, setEsPublico] = useState(false)
   const navigate = useNavigate()
 
+  // Subir archivo a Supabase Storage
   const subirArchivo = async (e) => {
-    alert('🔁Función ejecutada!')
+    console.log('🔄 1. Función iniciada')
     const archivo = e.target.files[0]
     if (!archivo) return
 
+    console.log('📁 2. Archivo seleccionado:', archivo.name)
     setArchivoSubido(archivo)
 
     // Detectar si es imagen o video
@@ -34,9 +36,10 @@ export default function MiPerfil() {
 
     // Nombre único para el archivo
     const nombreUnico = `${Date.now()}-${archivo.name}`
+    console.log('📝 3. Subiendo como:', nombreUnico)
 
     // Subir a Supabase
-    const { error } = await supabase
+    const { data, error } = await supabase
       .storage
       .from('archivos')
       .upload(`public/${nombreUnico}`, archivo, {
@@ -44,9 +47,11 @@ export default function MiPerfil() {
         upsert: false
       })
 
+    console.log('📤 4. Respuesta:', { data, error })
+
     if (error) {
-      console.error('Error al subir:', error)
-      alert('No se pudo subir el archivo' +error.message)
+      console.error('❌ Error al subir:', error)
+      alert('❌ No se pudo subir el archivo: ' + error.message)
       return
     }
 
@@ -55,8 +60,9 @@ export default function MiPerfil() {
       .storage
       .from('archivos')
       .getPublicUrl(`public/${nombreUnico}`)
-      setUrlArchivo(publicUrl)
-    console.log('✅ Archivo subido:', publicUrl)
+
+    console.log('🌐 5. URL lista:', publicUrl)
+    setUrlArchivo(publicUrl)
   }
   
   // Cargar datos del usuario
@@ -109,8 +115,9 @@ export default function MiPerfil() {
   const handleCrearPortafolio = async (e) => {
     e.preventDefault()
 
-    if(!urlArchivo){
-      return alert('⚠️Espera a que se cargue la imagen primero. Deberia aparecer "✅Archivo llisto" abajo')
+    if (!urlArchivo) {
+      return alert('⚠️ Esperá a que se cargue la imagen primero. Debería aparecer "✅ Archivo listo" abajo')
+    }
 
     const { error } = await supabase.from('portafolios').insert([{
       usuario_id: usuario.id,
@@ -358,4 +365,4 @@ export default function MiPerfil() {
       </div>
     </div>
   )
-}}
+}
