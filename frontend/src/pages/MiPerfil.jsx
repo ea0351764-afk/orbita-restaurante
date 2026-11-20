@@ -109,6 +109,9 @@ export default function MiPerfil() {
   const handleCrearPortafolio = async (e) => {
     e.preventDefault()
 
+    if(!urlArchivo){
+      return alert('⚠️Espera a que se cargue la imagen primero. Deberia aparecer "✅Archivo llisto" abajo')
+
     const { error } = await supabase.from('portafolios').insert([{
       usuario_id: usuario.id,
       titulo: nuevoTitulo,
