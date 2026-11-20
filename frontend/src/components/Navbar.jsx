@@ -17,7 +17,7 @@ export default function Navbar() {
     verificarUsuario()
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_, session) => {
-      setUsuario(session?.user || null)
+      setUsuario(sesion? sesion.user || null)
     })
 
     return () => subscription.unsubscribe()
