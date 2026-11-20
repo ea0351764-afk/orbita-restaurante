@@ -40,7 +40,6 @@ export default function Navbar() {
     { nombre: 'Iniciar Sesión', ruta: '/Login', soloSiNoLogueado: true },
     { nombre: 'Crear Perfil', ruta: '/Registro', soloSiNoLogueado: true },
     // Solo visibles cuando SÍ hay sesión
-    { nombre: 'Mi Portafolio', ruta: '/MiPortafolio', soloSiLogueado: true },
     { nombre: 'Mi Perfil', ruta: '/MiPerfil', soloSiLogueado: true },
     { nombre: 'Cerrar Sesión', accion: 'cerrar', soloSiLogueado: true }
   ]
