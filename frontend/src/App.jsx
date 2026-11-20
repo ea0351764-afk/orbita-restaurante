@@ -6,7 +6,6 @@ import Inicio from './pages/Inicio'
 import Acerca from './pages/Acerca'
 import Servicios from './pages/Servicios'
 import PortafoliosPublicos from './pages/PortafoliosPublicos'
-import MiPortafolio from './pages/MiPortafolio'
 import ReservaMesas from './pages/ReservaMesas'
 import Login from './pages/Login'
 import Registro from './pages/Registro'
@@ -35,7 +34,6 @@ export default function App() {
             <Route path="/Acerca" element={<Acerca />} />
             <Route path="/Servicios" element={<Servicios />} />
             <Route path="/PortafoliosPublicos" element={<PortafoliosPublicos />} />
-            <Route path="/MiPortafolio" element={<MiPortafolio />} />
           </Routes>
           <Footer />
         </>
