@@ -19,6 +19,7 @@ export default function MiPerfil() {
   const navigate = useNavigate()
 
   const subirArchivo = async (e) => {
+    alert('🔁Función ejecutada!')
     const archivo = e.target.files[0]
     if (!archivo) return
 
@@ -45,7 +46,7 @@ export default function MiPerfil() {
 
     if (error) {
       console.error('Error al subir:', error)
-      alert('No se pudo subir el archivo')
+      alert('No se pudo subir el archivo' +error.message)
       return
     }
 
@@ -54,8 +55,7 @@ export default function MiPerfil() {
       .storage
       .from('archivos')
       .getPublicUrl(`public/${nombreUnico}`)
-
-    setUrlArchivo(publicUrl)
+      setUrlArchivo(publicUrl)
     console.log('✅ Archivo subido:', publicUrl)
   }
   
